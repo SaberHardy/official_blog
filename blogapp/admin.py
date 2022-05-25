@@ -4,7 +4,7 @@ from blogapp.models import Post
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'slug')
+    list_display = ('title', 'author', 'status', 'slug')
 
 
 admin.site.register(Post, AuthorAdmin)

@@ -5,6 +5,10 @@ from django.db import models
 
 
 class Post(models.Model):
+    class NewManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(status='published')
+
     options = (
         ('draft', 'Draft'),
         ('published', 'Published'),
@@ -16,6 +20,10 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     content = models.TextField()
     status = models.CharField(max_length=10, choices=options, default='draft')
+
+    # instead of using everytime the order we need to make it by default
+    objects = models.Manager()  # default manager
+    new_manager = NewManager()  # custom manager
 
     class Meta:
         ordering = ['-publish', ]
