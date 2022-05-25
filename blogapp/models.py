@@ -15,6 +15,7 @@ class Post(models.Model):
     )
 
     title = models.CharField(max_length=200)
+    excerpt = models.TextField()
     slug = models.SlugField(max_length=250, unique_for_date='publish')
     publish = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
@@ -26,6 +27,7 @@ class Post(models.Model):
     new_manager = NewManager()  # custom manager
 
     class Meta:
+        # add "-" showing the last one added (by newer post)
         ordering = ['-publish', ]
 
     def __str__(self):

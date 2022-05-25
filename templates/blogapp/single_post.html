@@ -1,0 +1,15 @@
+{% extends 'blogapp/base.html' %}
+{% load static %}
+{% block title %}Blog Detail{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-8">
+                <h3 class="text-center">Single blog</h3>
+                <div><b>{{ post_single.title|capfirst }}</b></div>
+                <div>{{ post_single.content|safe }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

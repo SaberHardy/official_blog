@@ -5,4 +5,5 @@ app_name = 'blog'
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('detail/<slug:post>/', views.single_post, name='single_post'),
 ]
