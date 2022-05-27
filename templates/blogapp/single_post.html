@@ -7,6 +7,7 @@
         <div class="row justify-content-md-center">
             <div class="col-md-8">
                 <h3 class="text-center">Single blog</h3>
+                <img class="card-img-top mb-3" src="{{post.image.url}}" alt="card img">
                 <div><b>{{ post.title|capfirst }}</b></div>
                 <div>{{ post.content|safe }}</div>
                 <div class="float-right">{{ post.publish|date }}</div>

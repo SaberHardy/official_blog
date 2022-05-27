@@ -49,3 +49,11 @@ class CategoryListView(ListView):
                                          ).filter(status='published')
         }
         return content
+
+
+def category_list(request):
+    categories = Category.objects.exclude(name='default')
+    context = {
+        'categories': categories,
+    }
+    return context

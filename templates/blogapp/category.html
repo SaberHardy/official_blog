@@ -17,9 +17,9 @@
                                 <img class="card-img-top" src="https://picsum.photos/200/100" alt="card img">
                                 <div class="card-body">
                                     <h2 style="font-size: 18px; font-weight: bold;">
-                                        {{ post.title|truncatechars:50 }}
+                                        {{ post.title|truncatechars:10|capfirst }}
                                     </h2>
-                                    <p class="card-text">{{ post.excerpt|truncatechars:50 }}</p>
+                                    <p class="card-text">{{ post.excerpt|truncatechars:10 }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-muted">9 min</small>
                                     </div>
