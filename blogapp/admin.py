@@ -1,6 +1,6 @@
 from django.contrib import admin
 from blogapp import models
-from blogapp.models import Post, Comment
+from blogapp.models import Post, Comment, Category
 
 
 @admin.register(models.Post)
@@ -17,5 +17,6 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('status', 'date_commented')
     search_fields = ('name', 'email', 'content')
 
+
 # admin.site.register(Post, AuthorAdmin)
-# admin.site.register(Comment)
+admin.site.register(Category)

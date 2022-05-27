@@ -7,14 +7,14 @@
     <div class="container my-5">
         <div class="row justify-content-md-center">
             {% for post in posts %}
-                <div class="col-md-8 ">
+                <div class="col-md-8 my-3">
                     <div class="col-12">
-                        <h1 class="text-center"><a href="{% url 'blog:single_post' post.slug %}">
+                        <h1><a href="{% url 'blog:single_post' post.slug %}">
                             {{ post.title|capfirst }}</a></h1>
                     </div>
                     <div class="col-12">
                         {{ post.excerpt }} <br>
-                        <span class="float-right">Published: {{ post.publish|date }}</span>
+{#                        <span class="float-right">Published: {{ post.publish|date }}</span>#}
                     </div>
                 </div>
             {% endfor %}

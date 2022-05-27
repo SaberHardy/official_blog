@@ -4,6 +4,13 @@ from django.utils import timezone
 from django.db import models
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
 class Post(models.Model):
     class NewManager(models.Manager):
         def get_queryset(self):
@@ -15,6 +22,8 @@ class Post(models.Model):
     )
 
     title = models.CharField(max_length=200)
+    # models.PROTECT will allow us to keep our post in our database
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=2)
     excerpt = models.TextField()
     slug = models.SlugField(max_length=250, unique_for_date='publish')
     publish = models.DateTimeField(default=timezone.now)
