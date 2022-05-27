@@ -1,8 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView
 
 from blogapp.forms import CommentForm
-from blogapp.models import Post
+from blogapp.models import Post, Category
 
 
 def home(request):
@@ -35,3 +36,16 @@ def single_post(request, post):
         'user_comment': user_comment,
     }
     return render(request, 'blogapp/single_post.html', context)
+
+
+class CategoryListView(ListView):
+    template_name = 'blogapp/category.html'
+    context_object_name = 'categorylist'
+
+    def get_queryset(self):
+        content = {
+            'category': self.kwargs['category'],
+            'posts': Post.objects.filter(category__name=self.kwargs['category']
+                                         ).filter(status='published')
+        }
+        return content
