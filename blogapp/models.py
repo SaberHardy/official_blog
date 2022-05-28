@@ -5,6 +5,10 @@ from django.utils import timezone
 from django.db import models
 
 
+def user_directory_path(instance, filename):
+    return 'posts/{0}/{1}'.format(instance.id, filename)
+
+
 class Category(models.Model):
     name = models.CharField(max_length=200)
 
@@ -31,6 +35,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     content = models.TextField()
     status = models.CharField(max_length=10, choices=options, default='draft')
+    image = models.ImageField(upload_to=user_directory_path, default='posts/trees.jpeg')
 
     # instead of using everytime the order we need to make it by default
     objects = models.Manager()  # default manager

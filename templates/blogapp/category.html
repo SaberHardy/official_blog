@@ -14,7 +14,7 @@
                     <div class="col-md-4">
                         <a href="{{ post.get_absolute_url }}" class="text-dark">
                             <div class="card mb-4 box-shadow">
-                                <img class="card-img-top" src="https://picsum.photos/200/100" alt="card img">
+                                <img class="card-img-top" src="{{ post.image.url }}" alt="card img">
                                 <div class="card-body">
                                     <h2 style="font-size: 18px; font-weight: bold;">
                                         {{ post.title|truncatechars:10|capfirst }}

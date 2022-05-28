@@ -5,10 +5,11 @@ from blogapp.models import Post, Comment, Category
 
 @admin.register(models.Post)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'status', 'slug')
+    list_display = ('id', 'title', 'author', 'status', 'slug')
     prepopulated_fields = {
         "slug": ("title",),
     }
+    ordering = ('id',)
 
 
 @admin.register(models.Comment)
