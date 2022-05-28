@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
-
+from mptt.models import MPTTModel, TreeForeignKey
 from django.db import models
 
 
@@ -52,17 +52,23 @@ class Post(models.Model):
         return reverse('blog:single_post', args=[self.slug])
 
 
-class Comment(models.Model):
+class Comment(MPTTModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE,
+                            null=True, blank=True, related_name='children')
     name = models.CharField(max_length=50)
     email = models.EmailField()
     content = models.TextField()
     date_commented = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
 
-    class Meta:
-        # add "-" showing the last one added (by newer post)
-        ordering = ('date_commented',)
+    # we don't need this meta class
+    # class Meta:
+    #     # add "-" showing the last one added (by newer post)
+    #     ordering = ('date_commented',)
+
+    class MPTTMeta:
+        order_insertion_by = ['date_commented']
 
     def __str__(self):
         return f"Comment by {self.name}"
