@@ -4,12 +4,13 @@
 
 {% block content %}
     <style>
-    .children form {
-        margin-left: -48px;
-    }
-    .children .children form {
-        margin-left: -96px;
-    }
+        .children form {
+            margin-left: -48px;
+        }
+
+        .children .children form {
+            margin-left: -96px;
+        }
     </style>
     <div class="container mb-5">
         <div class="row justify-content-md-center">
@@ -28,12 +29,21 @@
                     {% load mptt_tags %}
                     <div>
                         {% recursetree comments %}
-                            <div id="{{ node.id }}">{{ node.content }}</div>
-                            <div>{{ node.level }}</div>
+                            <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid cadetblue">
 
-                            <button class="btn btn-info my-2" onclick="myFunction({{ node.id }})">Reply</button>
-                            <hr>
+                                <div class="d-flex justify-content-between">
+                                    By {{ node.name }}
+                                    <div>{{ node.date_commented|date }}</div>
+                                </div>
+                                <div>{{ node.content }}</div>
+                                <div>{{ node.level }}</div>
 
+                                {% if node.level < 3 %}
+
+                                    <button class="btn btn-info my-2" onclick="myFunction({{ node.id }})">Reply</button>
+                                    <hr>
+                                {% endif %}
+                            </div>
                             {% if not node.is_leaf_node %}
                                 <div class="children pl-2 pl-md-5">
                                     {{ children }}
@@ -79,7 +89,8 @@
             var d1 = document.getElementById(id);
             d1.insertAdjacentHTML('afterend',
                 '<form id="newForm" class="form-insert py-2" method="post"> \
-                          <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
+                          <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" \
+                          class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
                           <label for="id_name">Name:</label> \
                           <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
                           <select name="parent" class="d-none" id="id_parentt"> \
