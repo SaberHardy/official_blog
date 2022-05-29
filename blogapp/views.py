@@ -4,6 +4,7 @@ from django.views.generic import ListView
 
 from blogapp.forms import CommentForm
 from blogapp.models import Post, Category
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
@@ -16,7 +17,17 @@ def home(request):
 
 def single_post(request, post):
     post = get_object_or_404(Post, slug=post, status='published')
-    comments = post.comments.filter(status=True)
+
+    allcomments = post.comments.filter(status=True)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(allcomments, 2)
+    try:
+        comments = paginator.page(page)
+    except PageNotAnInteger:
+        comments = paginator.page(1)
+    except EmptyPage:
+        comments = paginator.page(paginator.num_pages)
+
     user_comment = None
 
     if request.method == 'POST':
@@ -34,6 +45,7 @@ def single_post(request, post):
         'post': post,
         'comments': comments,
         'user_comment': user_comment,
+        'allcomments': allcomments,
     }
     return render(request, 'blogapp/single_post.html', context)
 
