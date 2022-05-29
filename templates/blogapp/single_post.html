@@ -3,6 +3,14 @@
 {% block title %}Blog Detail{% endblock %}
 
 {% block content %}
+    <style>
+    .children form {
+        margin-left: -48px;
+    }
+    .children .children form {
+        margin-left: -96px;
+    }
+    </style>
     <div class="container mb-5">
         <div class="row justify-content-md-center">
             <div class="col-md-8">
@@ -20,8 +28,12 @@
                     {% load mptt_tags %}
                     <div>
                         {% recursetree comments %}
-                            <div>{{ node.content }}</div>
+                            <div id="{{ node.id }}">{{ node.content }}</div>
                             <div>{{ node.level }}</div>
+
+                            <button class="btn btn-info my-2" onclick="myFunction({{ node.id }})">Reply</button>
+                            <hr>
+
                             {% if not node.is_leaf_node %}
                                 <div class="children pl-2 pl-md-5">
                                     {{ children }}
@@ -54,4 +66,36 @@
 
         </div>
     </div>
+    <script>
+        function formExit() {
+            document.getElementById("newForm").remove();
+        }
+
+        function myFunction(id) {
+            if (document.contains(document.getElementById("newForm"))) {
+                document.getElementById("newForm").remove();
+            }
+
+            var d1 = document.getElementById(id);
+            d1.insertAdjacentHTML('afterend',
+                '<form id="newForm" class="form-insert py-2" method="post"> \
+                          <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
+                          <label for="id_name">Name:</label> \
+                          <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
+                          <select name="parent" class="d-none" id="id_parentt"> \
+                          <option value="' + id + '" selected="' + id + '"></option> \
+                </select> \
+                <label for="id_email">Email:</label> \
+                <input type="text" name="email" class="col-sm-12" maxlength="254" required="" id="id_email"> \
+                <label for="id_content">Content:</label> \
+                <textarea name="content" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+                {% csrf_token %} \
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> \
+              </form>');
+
+            //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+        }
+
+        $('#myForm').trigger("reset");
+    </script>
 {% endblock %}
