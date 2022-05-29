@@ -4,12 +4,15 @@
 
 {% block content %}
     <style>
-        .children form {
-            margin-left: -48px;
-        }
+        @media screen and (min-width: 600px) {
 
-        .children .children form {
-            margin-left: -96px;
+            .children form {
+                margin-left: -48px;
+            }
+
+            .children .children form {
+                margin-left: -96px;
+            }
         }
     </style>
     <div class="container mb-5">
