@@ -7,7 +7,7 @@
         <div class="row justify-content-md-center">
             <div class="col-md-8">
                 <h3 class="text-center">Single blog</h3>
-                <img class="card-img-top mb-3" src="{{post.image.url}}" alt="card img">
+                <img class="card-img-top mb-3" src="{{ post.image.url }}" alt="card img">
                 <div><b>{{ post.title|capfirst }}</b></div>
                 <div>{{ post.content|safe }}</div>
                 <div class="float-right">{{ post.publish|date }}</div>
@@ -16,6 +16,22 @@
                     {% with comments.count as total_comments %}
                         <h2>{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
                     {% endwith %}
+
+                    {% load mptt_tags %}
+                    <div>
+                        {% recursetree comments %}
+                            <div>{{ node.content }}</div>
+                            <div>{{ node.level }}</div>
+                            {% if not node.is_leaf_node %}
+                                <div class="children pl-2 pl-md-5">
+                                    {{ children }}
+                                </div>
+                            {% endif %}
+                        {% endrecursetree %}
+                    </div>
+
+
+                    {% comment %}
                     {% for comment in comments %}
                         Comment: {{ forloop.counter }} by {{ comment.name }}
                         <span class="float-right my-2">On: {{ comment.date_commented }}</span>
@@ -23,8 +39,9 @@
                     {% empty %}
                         <p>No comments for this post!</p>
                     {% endfor %}
+                    {% endcomment %}
 
-                    <h2>Create a comment</h2>
+                    <h2 class="mt-5">Create a comment</h2>
                     <form method="POST" id="myForm">
                         {% csrf_token %}
                         {{ comment_form.as_p }}
