@@ -1,0 +1,52 @@
+{% extends 'blogapp/base.html' %}
+{% load static %}
+{% block title %}Blog Search{% endblock %}
+
+{% block content %}
+
+    <div class="mt-5 py-4">
+        {% if q %}
+            <div class="mx-5">
+                <h5>You are searching for: "{{ q }}" </h5>
+                <p>
+                    {% with results.count as total_results %}
+                        Found {{ total_results }} result{{ total_results|pluralize }}
+                    {% endwith %}
+                </p>
+                <p>
+                    <a href="{% url 'blog:search' %}" class="btn btn-primary mt-5"
+                       role="button" aria-disabled="true">
+                        New Search
+                    </a>
+                </p>
+            </div>
+        {% else %}
+            <div class="my-5 mx-5">
+                <form method="get">
+                    {{ form.as_p }}
+                    {#        <input class="form-control mr-sm-2"#}
+                    {#               type="search" placeholder="Search" name="q"#}
+                    {#               aria-label="Search">#}
+                    <input class="btn btn-outline-success my-3" type="submit" value="Search"><br>
+                </form>
+            </div>
+        {% endif %}
+        {% for post in results %}
+            <div class="card border-dark mb-3 mx-5 box-shadow" style="max-width: 18rem;">
+                <a href="{{ post.get_absolute_url }}">
+                    <img class="rounded" src="{{ post.image.url }}" style="width: 304px; height: 250px">
+                    <div class="card-header">
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </div>
+                    <div class="card-body text-dark">
+                        <p class="card-text">
+                            {{ post.content|truncatechars:50 }}
+                        </p>
+                    </div>
+                </a>
+                <div class="card-footer bg-transparent border-info">Created on: {{ post.publish|date }}</div>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

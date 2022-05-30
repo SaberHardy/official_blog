@@ -2,9 +2,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
-from blogapp.forms import CommentForm
+from blogapp.forms import CommentForm, SearchForm
 from blogapp.models import Post, Category
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 
 def home(request):
@@ -69,3 +70,26 @@ def category_list(request):
         'categories': categories,
     }
     return context
+
+
+def post_search(request):
+    form = SearchForm()
+    q = ''
+    c = ''
+    results = []
+    query = Q()
+    if 'q' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            q = form.cleaned_data['q']
+            c = form.cleaned_data['categories']
+
+            if c is not None:
+                query &= Q(category=c)
+            if q != '':
+                query &= Q(title__contains=q)
+
+            results = Post.objects.filter(query)
+
+    context = {'form': form, 'q': q, 'results': results}
+    return render(request, 'blogapp/search.html', context)

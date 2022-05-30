@@ -6,6 +6,7 @@ from django.db import models
 
 
 def user_directory_path(instance, filename):
+    # return 'posts/%Y/%m/%d/'.format(instance.id, filename)
     return 'posts/{0}/{1}'.format(instance.id, filename)
 
 

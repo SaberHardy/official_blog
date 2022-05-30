@@ -55,8 +55,9 @@
                             {% endif %}
                         {% endrecursetree %}
                     </div>
+                    <hr>
 
-                    <div class="py-4">
+                    <div class="py-4 d-flex justify-content-center">
                         <nav aria-label="Page navigation example">
                             {% if comments.has_other_pages %}
                                 <ul class="pagination">
@@ -98,7 +99,7 @@
                         <p>No comments for this post!</p>
                     {% endfor %}
                     {% endcomment %}
-
+                    <hr>
                     <h2 class="mt-5">Create a comment</h2>
                     <form method="POST" id="myForm">
                         {% csrf_token %}

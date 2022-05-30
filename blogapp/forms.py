@@ -1,7 +1,7 @@
 from django import forms
 from mptt.forms import TreeNodeChoiceField
 
-from blogapp.models import Comment
+from blogapp.models import Comment, Category
 
 
 class CommentForm(forms.ModelForm):
@@ -23,3 +23,19 @@ class CommentForm(forms.ModelForm):
             'email': forms.TextInput(attrs={"class": "col-sm-12"}),
             'content': forms.Textarea(attrs={"class": "form-control"}),
         }
+
+
+class SearchForm(forms.Form):
+    q = forms.CharField()
+    categories = forms.ModelChoiceField(
+        queryset=Category.objects.all().order_by('name')
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['categories'].required = False
+        self.fields['categories'].label = ''
+        self.fields['categories'].label = 'Category'
+        self.fields['q'].label = 'Search for'
+        self.fields['q'].widget.attrs.update({
+            'class': 'form-control'})
