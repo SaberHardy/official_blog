@@ -21,7 +21,7 @@
                                     </h2>
                                     <p class="card-text">{{ post.excerpt|truncatechars:10 }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">9 min</small>
+                                        <small class="text-muted">{{ post.publish|date }}</small>
                                     </div>
                                 </div>
                             </div>

@@ -36,6 +36,11 @@ class SearchForm(forms.Form):
         self.fields['categories'].required = False
         self.fields['categories'].label = ''
         self.fields['categories'].label = 'Category'
+        self.fields['categories'].widget.attrs.update({
+            'class': 'my-3'})
+
         self.fields['q'].label = 'Search for'
         self.fields['q'].widget.attrs.update({
-            'class': 'form-control'})
+            'class': 'form-control menudd'})
+        self.fields['q'].widget.attrs.update({
+            'data-toggle': 'dropdown'})

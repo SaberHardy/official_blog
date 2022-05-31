@@ -1,4 +1,5 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core import serializers
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
@@ -75,9 +76,24 @@ def category_list(request):
 def post_search(request):
     form = SearchForm()
     q = ''
-    c = ''
+    # c = ''
     results = []
     query = Q()
+
+    # this is caption the data that sent from ajax request
+    if request.POST.get('action') == 'post':
+        search_string = str(request.POST.get('ss'))
+
+        if search_string is not None:
+            search_string = Post.objects.filter(title__contains=search_string)[:3]
+            # As we know Javascript and python they can't talk to each others,
+            # so we need to serialize the data the gets return from database
+            data = serializers.serialize('json',
+                                         list(search_string),
+                                         fields=('id', 'title', 'slug'))
+
+            return JsonResponse({'search_string': data})
+
     if 'q' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
