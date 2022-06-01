@@ -1,10 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Login user{% endblock %}</title>
-</head>
-<body>
-<h1>Login user</h1>
-</body>
-</html>
+{% extends 'base/base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <style>
+        .login,
+        .image {
+            min-height: 100vh;
+        }
+
+        .bg-image {
+            background-image: url('https://picsum.photos/200/300');
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .container-fluid {
+            max-width: 100%;
+        }
+
+        .account-form input {
+            border: 2px solid #ccc;
+            height: calc(2em + .75rem + 2px);
+        }
+
+        .account-form input:focus {
+            border-color: #1497ff;
+            box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075), 0 0 0px rgba(255, 0, 0, 0.6);
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row no-gutter">
+            <div class="col-md-6 bg-light">
+                <div class="login d-flex align-items-center py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-12 mx-auto">
+                                <form class="account-form p-4 rounded" action="{% url 'login' %}" method="post">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button class="btn btn-success" type="submit" value="Login">SignIn</button>
+                                </form>
+                                <p class="small text-center pt-4">
+                                    <a href="{% url "password_reset" %}">Forgotten Password?</a>
+                                </p>
+                                <p class="small text-center">
+                                    {#                                    <a href="{% url "accounts:register" %}">Help Center!</a>#}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 d-none d-md-flex bg-image"></div>
+        </div>
+    </div>
+{% endblock %}
