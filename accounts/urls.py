@@ -11,4 +11,5 @@ urlpatterns = [
              template_name='registration/login.html',
              authentication_form=UserLoginForm),
          name='login'),
+    path('profile/', views.profile, name='profile')
 ]
