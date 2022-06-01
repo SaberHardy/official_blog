@@ -120,3 +120,5 @@ LOGIN_REDIRECT_URL = 'accounts:profile'
 LOGIN_URL = 'login'
 LOGIN_OUT = 'logout'
 # LOGOUT_REDIRECT_URL = 'blog:home'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
