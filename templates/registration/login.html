@@ -2,6 +2,11 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+    {% if user.is_authenticated %}
+        <script>
+            window.location.href = '{% url 'accounts:profile' %}';
+        </script>
+    {% endif %}
     <style>
         .login,
         .image {
@@ -37,9 +42,39 @@
                             <div class="col-12 col-md-12 mx-auto">
                                 <form class="account-form p-4 rounded" action="{% url 'login' %}" method="post">
                                     {% csrf_token %}
-                                    {{ form.as_p }}
-                                    <button class="btn btn-success" type="submit" value="Login">SignIn</button>
+                                    <p class="h4 mb-4 font-weight-bold">Sign in to your account</p>
+
+                                    {% if form.errors %}
+                                        <div class="alert alert-primary" role="alert">
+                                            Error: Username or password not correct
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                    {% endif %}
+
+                                    <label class="small font-weight-bold">{{ form.username.label }}</label>
+                                    {{ form.username }}
+
+                                    <label class="small font-weight-bold">{{ form.password.label }}</label>
+                                    {{ form.password }}
+
+                                    <button class="btn btn-success btn-block py-2 mb-4 mt-5 font-weight-bold"
+                                            type="submit"
+                                            value="Log-in">Sign
+                                        in
+                                    </button>
+                                    <hr class="mb-3">
+                                    <p class="small text-center">
+                                        By signing in to your account, you are agree to blog
+                                        <a href="">Terms of service</a>and consent to our<a href=""> Cookies Policy</a>
+                                        <a href="">Privacy Policy</a>
+                                        This site is protected by reCAPTCHA and is a demonstration website for learning
+                                        purposes only.
+                                    </p>
+                                    <hr>
                                 </form>
+
                                 <p class="small text-center pt-4">
                                     <a href="{% url "password_reset" %}">Forgotten Password?</a>
                                 </p>
