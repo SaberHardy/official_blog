@@ -9,7 +9,8 @@ class UserLoginForm(AuthenticationForm):
         attrs={'class': 'form-control mb-3', 'placeholder': 'Username'}
     ))
     password = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Your password', 'id': 'login-pwd', }
+        attrs={'class': 'form-control', 'type': 'password',
+               'placeholder': 'Your password', 'id': 'login-pwd'}
     ))
 
 
