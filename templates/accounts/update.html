@@ -52,10 +52,13 @@
                         </button>
                         <hr class="mb-3">
                         <p class=" h5 mb-2 pt-4 font-weight-bold">Delete Account</p>
-                        <p class="small">If you would like to delete your account press the button below:</p>
-                        {#                        <a href="{% url "accounts:deleteuser" %}"#}
-                        {#                           class="btn btn-danger btn-block py-2 mb-4 mt-5 font-weight-bold" role="button"#}
-                        {#                           aria-pressed="true">Delete Account</a>#}
+                        <p class="small">
+                            If you would like to delete your account press the button below:</p>
+
+                        <a href="{% url "accounts:delete_profile" %}"
+                           class="btn btn-danger btn-block py-2 mb-4 mt-5 font-weight-bold"
+                           role="button"
+                           aria-pressed="true">Delete your Account</a>
                     </form>
 
                 </div>

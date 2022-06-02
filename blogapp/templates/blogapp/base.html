@@ -43,7 +43,13 @@
                     {% endfor %}
                 </div>
             </li>
+        </ul>
 
+        <ul class="navbar-nav" style="margin-right: 150px;">
+            <li class="nav-item active text-center">
+                <a class="nav-link text-info font-weight-bold" href="">
+                    {{ user.username|upper }}</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="/search/" method="get">
             <input class="form-control mr-sm-2"

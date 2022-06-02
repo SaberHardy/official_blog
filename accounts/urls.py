@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('profile/', views.profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('profile/delete/', views.delete_profile, name='delete_profile'),
 
     path('register/', views.accounts_register, name='register'),
     path('activate/<slug:uidb64>/<slug:token>/', views.activate, name='activate'),

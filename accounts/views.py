@@ -77,3 +77,15 @@ def edit_profile(request):
     context = {'user_form': user_form}
 
     return render(request, 'accounts/update.html', context)
+
+
+@login_required
+def delete_profile(request):
+    if request.method == 'POST':
+        user = User.objects.get(username=request.user)
+        # disable the account from db
+        user.is_active = False
+        user.save()
+        return redirect('accounts:login')
+    else:
+        return render(request, 'accounts/delete_account.html')
