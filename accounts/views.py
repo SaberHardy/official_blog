@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import account_activation_token
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserEditForm
 
 
 # def login(request):
@@ -63,4 +63,17 @@ def activate(request, uidb64, token):
     else:
         return render(request, 'registration/activation_invalid.html')
 
-# PasswordResetView
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        if user_form.is_valid():
+            user_form.save()
+
+    else:
+        user_form = UserEditForm(instance=request.user)
+
+    context = {'user_form': user_form}
+
+    return render(request, 'accounts/update.html', context)

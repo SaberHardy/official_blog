@@ -25,16 +25,18 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">Dashboard</a>
-                    <a class="dropdown-item" href="#">Edit details</a>
-                    <a class="dropdown-item" href="#">Change Password</a>
+                    <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">Edit details</a>
+                    <a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Logout</a>
+                    {% if user.is_authenticated %}
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    {% endif %}
                 </div>
             </li>
         </ul>
     {% else %}
         <nav>
-{#            <a class="p-2 text-dark" href="{% url 'accounts:register' %}">Register</a>#}
+            {#            <a class="p-2 text-dark" href="{% url 'accounts:register' %}">Register</a>#}
             <a class="p-2 text-dark" href="{% url 'login' %}">Login</a>
         </nav>
     {% endif %}
