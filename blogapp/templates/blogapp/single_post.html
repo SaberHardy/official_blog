@@ -29,84 +29,89 @@
                     {% with allcomments.count as total_comments %}
                         <h2>{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
                     {% endwith %}
+                    {% if user.is_authenticated %}
+                        {% load mptt_tags %}
+                        <div>
+                            {% recursetree comments %}
+                                <div id="{{ node.id }}" class="my-2 p-2">
 
-                    {% load mptt_tags %}
-                    <div>
-                        {% recursetree comments %}
-                            <div id="{{ node.id }}" class="my-2 p-2">
+                                    <div class="d-flex justify-content-between">
+                                        By {{ node.name }}
+                                        <div>{{ node.date_commented|date }}</div>
+                                    </div>
+                                    <div>{{ node.content }}</div>
+                                    <div>{{ node.level }}</div>
 
-                                <div class="d-flex justify-content-between">
-                                    By {{ node.name }}
-                                    <div>{{ node.date_commented|date }}</div>
-                                </div>
-                                <div>{{ node.content }}</div>
-                                <div>{{ node.level }}</div>
+                                    {% if node.level < 3 %}
 
-                                {% if node.level < 3 %}
-
-                                    <button class="btn btn-info my-2" onclick="myFunction({{ node.id }})">Reply</button>
-                                    <hr>
-                                {% endif %}
-                            </div>
-                            {% if not node.is_leaf_node %}
-                                <div class="children pl-2 pl-md-5">
-                                    {{ children }}
-                                </div>
-                            {% endif %}
-                        {% endrecursetree %}
-                    </div>
-                    <hr>
-
-                    <div class="py-4 d-flex justify-content-center">
-                        <nav aria-label="Page navigation example">
-                            {% if comments.has_other_pages %}
-                                <ul class="pagination">
-                                    {% if comments.has_previous %}
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                               href="?page={{ comments.previous_page_number }}">Previous</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                        <button class="btn btn-info my-2" onclick="myFunction({{ node.id }})">Reply
+                                        </button>
+                                        <hr>
                                     {% endif %}
-                                    {% for num in comments.paginator.page_range %}
-                                        {% if comments.number == l %}
-                                            <li class="page-item active"><span class="page-link">{{ num }} <span
-                                                    class="sr-only">(current)</span></span>
+                                </div>
+                                {% if not node.is_leaf_node %}
+                                    <div class="children pl-2 pl-md-5">
+                                        {{ children }}
+                                    </div>
+                                {% endif %}
+                            {% endrecursetree %}
+                        </div>
+                        <hr>
+
+                        <div class="py-4 d-flex justify-content-center">
+                            <nav aria-label="Page navigation example">
+                                {% if comments.has_other_pages %}
+                                    <ul class="pagination">
+                                        {% if comments.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="?page={{ comments.previous_page_number }}">Previous</a>
                                             </li>
                                         {% else %}
-                                            <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a>
+                                            </li>
                                         {% endif %}
-                                    {% endfor %}
-                                    {% if comments.has_next %}
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                               href="?page={{ comments.next_page_number }}">Next</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-                                    {% endif %}
-                                </ul>
-                            {% endif %}
-                        </nav>
-                    </div>
-                    {% comment %}
-                    {% for comment in comments %}
-                        Comment: {{ forloop.counter }} by {{ comment.name }}
-                        <span class="float-right my-2">On: {{ comment.date_commented }}</span>
-                        {{ comment.content|linebreaks }}
-                    {% empty %}
-                        <p>No comments for this post!</p>
-                    {% endfor %}
-                    {% endcomment %}
-                    <hr>
-                    <h2 class="mt-5">Create a comment</h2>
-                    <form method="POST" id="myForm">
-                        {% csrf_token %}
-                        {{ comment_form.as_p }}
+                                        {% for num in comments.paginator.page_range %}
+                                            {% if comments.number == l %}
+                                                <li class="page-item active"><span class="page-link">{{ num }} <span
+                                                        class="sr-only">(current)</span></span>
+                                                </li>
+                                            {% else %}
+                                                <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if comments.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="?page={{ comments.next_page_number }}">Next</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </nav>
+                        </div>
+                        {% comment %}
+                            {% for comment in comments %}
+                                Comment: {{ forloop.counter }} by {{ comment.name }}
+                                <span class="float-right my-2">On: {{ comment.date_commented }}</span>
+                                {{ comment.content|linebreaks }}
+                            {% empty %}
+                                <p>No comments for this post!</p>
+                            {% endfor %}
+                        {% endcomment %}
+                        <hr>
+                        <h2 class="mt-5">Create a comment</h2>
+                        <form method="POST" id="myForm">
+                            {% csrf_token %}
+                            {{ comment_form.as_p }}
 
-                        <button class="btn btn-success float-right my-3">Submit comment</button>
-                    </form>
+                            <button class="btn btn-success float-right my-3">Submit comment</button>
+                        </form>
+                    {% else %}
+                        <a class="btn btn-info my-3" href="{% url 'accounts:login' %}">Login to write a comment</a>
+                    {% endif %}
                 </div>
 
             </div>

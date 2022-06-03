@@ -24,14 +24,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'blog:home' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
+{#            <li class="nav-item active">#}
+{#                <a class="nav-link" href="{% url 'blog:home' %}">Home <span class="sr-only">(current)</span></a>#}
+{#            </li>#}
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'blog:search' %}">
                     Category Search</a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" id="dropdownMenu2" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Categories
@@ -47,7 +47,7 @@
 
         <ul class="navbar-nav" style="margin-right: 150px;">
             <li class="nav-item active text-center">
-                <a class="nav-link text-info font-weight-bold" href="">
+                <a class="nav-link text-info font-weight-bold" href="{% url 'blog:home' %}">
                     {{ user.username|upper }}</a>
             </li>
         </ul>
