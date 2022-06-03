@@ -22,7 +22,7 @@
 
                     <form class="form-reset p-4 rounded update-form" method="post" enctype="multipart/form-data">
 
-                        {% if user_form.is_valid %}
+                        {% if user_form.is_valid and profile_form.is_valid %}
                             <div class="alert alert-primary" role="alert">
                                 Details successfully updated!
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -40,6 +40,15 @@
                         {% if form.errors %}
                             <div class="alert alert-primary" role="alert">
                                 Error: Please try again!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        {% endif %}
+
+                        {% if profile_form.errors %}
+                            <div class="alert alert-primary" role="alert">
+                                The image size should be 200x200
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
