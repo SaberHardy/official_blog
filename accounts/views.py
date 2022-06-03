@@ -7,12 +7,24 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+from .models import Profile
 from .tokens import account_activation_token
-from .forms import UserRegisterForm, UserEditForm
+from .forms import UserRegisterForm, UserEditForm, UserProfileForm
 
 
 # def login(request):
 #     return render(request, 'registration/login.html')
+
+@login_required
+def avatar_get(request):
+    user = User.objects.get(username=request.user)
+    avatar = Profile.objects.filter(user=user)
+    context = {
+        'user': user,
+        'avatar': avatar
+    }
+    return context
 
 
 @login_required
@@ -68,13 +80,22 @@ def activate(request, uidb64, token):
 def edit_profile(request):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
-        if user_form.is_valid():
-            user_form.save()
 
+        profile_form = UserProfileForm(
+            request.POST, request.FILES,
+            instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
     else:
         user_form = UserEditForm(instance=request.user)
+        profile_form = UserProfileForm(instance=request.user.profile)
 
-    context = {'user_form': user_form}
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form
+    }
 
     return render(request, 'accounts/update.html', context)
 

@@ -53,6 +53,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Make it available to hole project
                 'blogapp.views.category_list',
+                'accounts.views.avatar_get',
             ],
         },
     },
