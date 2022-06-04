@@ -2,12 +2,13 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+from blogapp.models import Post
 from .models import Profile
 from .tokens import account_activation_token
 from .forms import UserRegisterForm, UserEditForm, UserProfileForm
@@ -110,3 +111,21 @@ def delete_profile(request):
         return redirect('accounts:login')
     else:
         return render(request, 'accounts/delete_account.html')
+
+
+@login_required
+def add_to_favorites(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    # user = User.objects.get(username=request.user)
+    if post.favorites.filter(id=request.user.id).exists():
+        post.favorites.remove(request.user)
+    else:
+        post.favorites.add(request.user)
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def favorite_list(request):
+    new = Post.new_manager.filter(favorites=request.user)
+    return render(request, 'accounts/favorites.html', {'new': new})

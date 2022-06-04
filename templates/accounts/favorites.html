@@ -1,0 +1,45 @@
+{% extends "partials/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    {% include "partials/navbar.html" %}
+    <div class="container">
+        <section class="jumbotron text-center bg-white">
+            <div class="container">
+                <h1>User favorites</h1>
+                <p class="lead text-muted">You can remove any post from your list at anytime you want!!</p>
+            </div>
+        </section>
+        <div>
+            <div class="row">
+
+                {% for post in new %}
+                    <div class="col-md-4">
+                        <a href="{{ post.get_absolute_url }}" class="text-dark">
+                            <div class="card mb-4 box-shadow">
+                                <img class="card-img-top" style="width: 350px; height: 250px" src="{{ post.image.url }}"
+                                     alt="{{ post.title }}">
+                                <div class="card-body">
+                                    <h2 style="font-size: 18px; font-weight: bold;">
+                                        {{ post.title|truncatechars:10|capfirst }}
+                                    </h2>
+                                    <p class="card-text">{{ post.excerpt|truncatechars:10 }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">{{ post.publish|date }}</small>
+                                        <div id="favorite-section">
+                                        <a class="btn btn-outline-danger"
+                                           href="{% url 'accounts:add_to_favorites' post.pk %}">
+                                            Remove from favorites
+                                        </a>
+                                    </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% include "partials/footer.html" %}
+{% endblock %}

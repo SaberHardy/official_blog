@@ -20,6 +20,10 @@ def home(request):
 def single_post(request, post):
     post = get_object_or_404(Post, slug=post, status='published')
 
+    favorite = bool
+    if post.favorites.filter(id=request.user.id).exists():
+        favorite = True
+
     allcomments = post.comments.filter(status=True)
     page = request.GET.get('page', 1)
     paginator = Paginator(allcomments, 2)
@@ -48,6 +52,7 @@ def single_post(request, post):
         'comments': comments,
         'user_comment': user_comment,
         'allcomments': allcomments,
+        'favorite': favorite,
     }
     return render(request, 'blogapp/single_post.html', context)
 

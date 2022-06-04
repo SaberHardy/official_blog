@@ -36,6 +36,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     content = models.TextField()
     status = models.CharField(max_length=10, choices=options, default='draft')
+    favorites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
     image = models.ImageField(upload_to=user_directory_path, default='posts/trees.jpeg')
 
     # instead of using everytime the order we need to make it by default
