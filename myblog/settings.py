@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'blogapp.apps.BlogappConfig',
     'accounts.apps.AccountsConfig',
     'mptt',
+
+    # 'admin_honeypot',
 ]
 
 MIDDLEWARE = [
