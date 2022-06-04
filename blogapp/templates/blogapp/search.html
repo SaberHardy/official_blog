@@ -64,7 +64,7 @@
             e.preventDefault();
 
             var results = [];
-            // we will implement the search after the nbr of chars user typed
+            // we will implement the search after the nbr of chars users typed
             var minlength = 3;
 
             if ($('#id_q').val().length >= minlength) {
@@ -73,7 +73,7 @@
                     {# send data that have gotten to our view #}
                     url: '{% url "blog:search" %}',
                     data: {
-                        {# id_q its a search input q used to capture the value from user #}
+                        {# id_q its a search input q used to capture the value from users #}
                         ss: $('#id_q').val(),
                         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                         action: 'post'
