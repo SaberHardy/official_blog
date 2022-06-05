@@ -4,6 +4,31 @@
 
 {% block content %}
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
+
+        .h1 {
+            font-family: 'PT Serif', serif;
+            font-size: 2.55rem;
+            line-height: 2.6rem;
+            letter-spacing: -0.063px;
+        }
+
+        h2 {
+            font-family: 'PT Serif', serif;
+            font-size: 1.9rem;
+            line-height: 2.6rem;
+            letter-spacing: -0.063px;
+            font-weight: 700;
+            padding-top: 48px;
+        }
+
+        p {
+            font-family: 'PT Serif', serif;
+            line-height: 2rem;
+            font-size: 1.3rem
+        }
+
         @media screen and (min-width: 600px) {
 
             .children form {
@@ -14,44 +39,126 @@
                 margin-left: -96px;
             }
         }
+
+        .avatar_single {
+            height: 48px;
+            width: 48px;
+            background-color: #000;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .smaller {
+            font-size: 0.8rem;
+        }
     </style>
 
-    <div class="container my-5">
-        <div class="row justify-content-md-center">
-
-            <div class="col-md-7 d-flex justify-content-between">
-                <h1 class="h4">{{ post.title|capfirst }}</h1>
-                {% if user.is_authenticated %}
-                    {% if favorite %}
-                        <div>
-                            <a href="{% url 'accounts:favorite_list' %}" class="btn btn-danger my-2">
-                                Remove from favorites
+    <div class="container">
+        <div class="row justify-content-md-center pt-5">
+            <div class="col-md-8 d-flex justify-content-between">
+                <h1 class="h1">{{ post.title }}</h1>
+            </div>
+            <div class="col-md-8 d-flex justify-content-between pt-3">
+                <div class="d-flex">
+                    <div><img class="avatar_single" src="{{ post.author.profile.avatar.url }}"></div>
+                    <div class="pl-3 no-gutters">
+                        <div class="col-12 no-gutters">{{ post.author|title }}</div>
+                        <div class="col-12 no-gutters smaller text-muted">{{ post.publish }}</div>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    {% if request.user.is_authenticated %}
+                        <div class="pr-2">
+                            <span class="" id="like_count">{{ post.like_count }}</span>
+                            <button class="btn btn-link text-dark p-0 border-0 btn-outline-light" id="like-button"
+                                    value="{{ post.id }}">
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                     class="bi bi-heart"
+                                     fill="currentColor"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641
+                                          2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542
+                                          6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717
+                                          2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824
+                                          1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042
+                                          23.333 4.867 8 15z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        {% if favorite %}
+                            <div>
+                                <a href="{% url 'accounts:add_to_favorites' post.id %}" class="text-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                         class="bi bi-bookmark-check" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                              d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708
+                                              0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z">
+                                        </path>
+                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8
+                                        13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1
+                                        1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        {% else %}
+                            <div>
+                                <a href="{% url 'accounts:add_to_favorites' post.id %}" class="text-success">
+                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-bookmark-plus"
+                                         fill="currentColor"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M4.5 2a.5.5 0 0 0-.5.5v11.066l4-2.667 4 2.667V8.5a.5.5 0 0 1 1
+                                              0v6.934l-5-3.333-5 3.333V2.5A1.5 1.5 0 0 1 4.5 1h4a.5.5 0 0 1 0
+                                              1h-4zm9-1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1
+                                              0-1H13V1.5a.5.5 0 0 1 .5-.5z"></path>
+                                        <path fill-rule="evenodd"
+                                              d="M13 3.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="pr-2">
+                            <span class="" id="like_count">{{ post.like_count }}</span>
+                            <a href="{% url 'accounts:register' %}"
+                               class="btn btn-link text-dark p-0 border-0 btn-outline-light">
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-heart"
+                                     fill="currentColor"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314
+                                          4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542
+                                          6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8
+                                          2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12
+                                          3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path>
+                                </svg>
                             </a>
                         </div>
-                    {% else %}
                         <div>
-                            <a href="{% url 'accounts:add_to_favorites' post.pk %}" class="btn btn-success my-2">
-                                Add to favorites
+                            <a href="{% url 'accounts:register' %}" class="text-dark">
+                                <svg width="1.5em" height="1.5em"
+                                     viewBox="0 0 16 16" class="bi bi-bookmark-plus" fill="currentColor"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M4.5 2a.5.5 0 0 0-.5.5v11.066l4-2.667 4 2.667V8.5a.5.5 0 0 1 1 0v6.934l-5-3.333-5 3.333V2.5A1.5 1.5 0 0 1 4.5 1h4a.5.5 0 0 1 0 1h-4zm9-1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V1.5a.5.5 0 0 1 .5-.5z"></path>
+                                    <path fill-rule="evenodd"
+                                          d="M13 3.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"></path>
+                                </svg>
                             </a>
                         </div>
                     {% endif %}
-                {% else %}
-                    <div>
-                        <a href="{% url 'accounts:register' %}" class="">Add to favorites</a>
-                    </div>
-                {% endif %}
+                </div>
             </div>
+            <div class="col-md-10 pt-5">
+                <img class="card-img-top" src="{{ post.image.url }}" alt="{{ post.title }}">
+                <div class="col-12 text-center small text-muted pt-1">{{ post.image_caption }}</div>
+                <p>{{ post.content|safe }}</p>
 
-            <div class="col-md-10" style="border: 1px solid cadetblue">
-
-                <img class="card-img-top my-3" src="{{ post.image.url }}" alt="card img">
-                <div><b>{{ post.title|capfirst }}</b></div>
-                <div>{{ post.content|safe }}</div>
-                <div class="float-right my-3">Published on: {{ post.publish|date }}</div>
                 <br>
-                <div class="col-md-12 my-5" style="border: 1px solid #0f1010">
+                <div class="col-md-12 my-5" style="border: 0.3px solid #0f1010">
                     {% with allcomments.count as total_comments %}
-                        <h2>{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
+                        <h4 class="mt-3">{{ total_comments }} comment{{ total_comments|pluralize }}</h4>
                     {% endwith %}
                     {% if user.is_authenticated %}
                         {% load mptt_tags %}
@@ -80,7 +187,6 @@
                                 {% endif %}
                             {% endrecursetree %}
                         </div>
-                        <hr>
 
                         <div class="py-4 d-flex justify-content-center">
                             <nav aria-label="Page navigation example">
@@ -92,7 +198,8 @@
                                                    href="?page={{ comments.previous_page_number }}">Previous</a>
                                             </li>
                                         {% else %}
-                                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a>
+                                            <li class="page-item disabled"><a class="page-link"
+                                                                              href="#">Previous</a>
                                             </li>
                                         {% endif %}
                                         {% for num in comments.paginator.page_range %}
@@ -110,7 +217,8 @@
                                                    href="?page={{ comments.next_page_number }}">Next</a>
                                             </li>
                                         {% else %}
-                                            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                                            <li class="page-item disabled"><a class="page-link" href="#">Next</a>
+                                            </li>
                                         {% endif %}
                                     </ul>
                                 {% endif %}
@@ -129,6 +237,7 @@
                         <h2 class="mt-5">Create a comment</h2>
                         <form method="POST" id="myForm">
                             {% csrf_token %}
+
                             {{ comment_form.as_p }}
 
                             <button class="btn btn-success float-right my-3">Submit comment</button>
@@ -139,7 +248,6 @@
                 </div>
 
             </div>
-
         </div>
     </div>
     <script>
@@ -174,5 +282,25 @@
         }
 
         $('#myForm').trigger("reset");
+
+        $(document).on('click', '#like-button', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '{% url "accounts:like" %}',
+                data: {
+                    postid: $('#like-button').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success: function (json) {
+                    document.getElementById("like_count").innerHTML = json['result']
+                    console.log(json)
+                },
+                error: function (xhr, errmsg, err) {
+
+                }
+            });
+        })
     </script>
 {% endblock %}

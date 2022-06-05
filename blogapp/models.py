@@ -37,6 +37,10 @@ class Post(models.Model):
     content = models.TextField()
     status = models.CharField(max_length=10, choices=options, default='draft')
     favorites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
+
+    likes = models.ManyToManyField(User, related_name='like', default=None, blank=True)
+    like_count = models.BigIntegerField(default='0')
+
     image = models.ImageField(upload_to=user_directory_path, default='posts/trees.jpeg')
 
     # instead of using everytime the order we need to make it by default
