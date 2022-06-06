@@ -1,4 +1,4 @@
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
@@ -129,8 +129,11 @@ def post_search(request):
 
             # results = Post.objects.filter(title__search=q)
 
+            # results = Post.objects.annotate(search=SearchVector(
+            #     'title', 'content'),).filter(search=q)
+
             results = Post.objects.annotate(search=SearchVector(
-                'title', 'content'),).filter(search=q)
+                    'title', 'content'),).filter(search=SearchQuery(q))
 
     context = {'form': form, 'q': q, 'results': results}
     return render(request, 'blogapp/search.html', context)
