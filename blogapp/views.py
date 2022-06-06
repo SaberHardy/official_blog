@@ -103,10 +103,10 @@ def post_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             q = form.cleaned_data['q']
-            c = form.cleaned_data['categories']
-
-            if c is not None:
-                query &= Q(category=c)
+            # c = form.cleaned_data['categories']
+            #
+            # if c is not None:
+            #     query &= Q(category=c)
             if q != '':
                 query &= Q(title__contains=q)
 

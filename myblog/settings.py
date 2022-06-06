@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blogapp.apps.BlogappConfig',
     'accounts.apps.AccountsConfig',
+    'django.contrib.postgres',
     'mptt',
 
     # 'admin_honeypot',

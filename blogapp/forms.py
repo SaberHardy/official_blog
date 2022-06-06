@@ -27,17 +27,17 @@ class CommentForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     q = forms.CharField()
-    categories = forms.ModelChoiceField(
-        queryset=Category.objects.all().order_by('name')
-    )
+    # categories = forms.ModelChoiceField(
+    #     queryset=Category.objects.all().order_by('name')
+    # )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['categories'].required = False
-        self.fields['categories'].label = ''
-        self.fields['categories'].label = 'Category'
-        self.fields['categories'].widget.attrs.update({
-            'class': 'my-3'})
+        # self.fields['categories'].required = False
+        # self.fields['categories'].label = ''
+        # self.fields['categories'].label = 'Category'
+        # self.fields['categories'].widget.attrs.update({
+        #     'class': 'my-3'})
 
         self.fields['q'].label = 'Search for'
         self.fields['q'].widget.attrs.update({
