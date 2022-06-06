@@ -78,39 +78,55 @@ def category_list(request):
     return context
 
 
+# def post_search(request):
+#     form = SearchForm()
+#     q = ''
+#     # c = ''
+#     results = []
+#     query = Q()
+#
+#     # this is caption the data that sent from ajax request
+#     if request.POST.get('action') == 'post':
+#         search_string = str(request.POST.get('ss'))
+#
+#         if search_string is not None:
+#             search_string = Post.objects.filter(title__contains=search_string)[:3]
+#             # As we know Javascript and python they can't talk to each others,
+#             # so we need to serialize the data the gets return from database
+#             data = serializers.serialize('json',
+#                                          list(search_string),
+#                                          fields=('id', 'title', 'slug'))
+#
+#             return JsonResponse({'search_string': data})
+#
+#     if 'q' in request.GET:
+#         form = SearchForm(request.GET)
+#         if form.is_valid():
+#             q = form.cleaned_data['q']
+#             # c = form.cleaned_data['categories']
+#             #
+#             # if c is not None:
+#             #     query &= Q(category=c)
+#             if q != '':
+#                 query &= Q(title__contains=q)
+#
+#             results = Post.objects.filter(query)
+#
+#     context = {'form': form, 'q': q, 'results': results}
+#     return render(request, 'blogapp/search.html', context)
+
+
 def post_search(request):
     form = SearchForm()
     q = ''
-    # c = ''
     results = []
-    query = Q()
-
-    # this is caption the data that sent from ajax request
-    if request.POST.get('action') == 'post':
-        search_string = str(request.POST.get('ss'))
-
-        if search_string is not None:
-            search_string = Post.objects.filter(title__contains=search_string)[:3]
-            # As we know Javascript and python they can't talk to each others,
-            # so we need to serialize the data the gets return from database
-            data = serializers.serialize('json',
-                                         list(search_string),
-                                         fields=('id', 'title', 'slug'))
-
-            return JsonResponse({'search_string': data})
 
     if 'q' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
             q = form.cleaned_data['q']
-            # c = form.cleaned_data['categories']
-            #
-            # if c is not None:
-            #     query &= Q(category=c)
-            if q != '':
-                query &= Q(title__contains=q)
 
-            results = Post.objects.filter(query)
+            results = Post.objects.filter(title__search=q)
 
     context = {'form': form, 'q': q, 'results': results}
     return render(request, 'blogapp/search.html', context)
