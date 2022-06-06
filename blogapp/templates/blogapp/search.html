@@ -29,9 +29,9 @@
                     <ul class="dropdown-menu col-12 pl-2" role="menu" aria-labelledby="menu" id="list">
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
                         <div class="dropdown-divider"></div>
-{#                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>#}
-{#                        <div class="dropdown-divider"></div>#}
-{#                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>#}
+                        {#                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>#}
+                        {#                        <div class="dropdown-divider"></div>#}
+                        {#                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>#}
                     </ul>
                     {{ form.categories }}
                     <br>
@@ -41,8 +41,10 @@
                 </form>
             </div>
         {% endif %}
+    </div>
+    <div class="card-group">
         {% for post in results %}
-            <div class="card border-dark mb-3 mx-5 box-shadow" style="max-width: 18rem;">
+            <div class="card border-dark mb-3 mx-5" style="max-width: 18rem;">
                 <a href="{{ post.get_absolute_url }}">
                     <img class="rounded" src="{{ post.image.url }}" style="width: 304px; height: 250px">
                     <div class="card-header">
