@@ -1,6 +1,6 @@
 from django.contrib import admin
 from blogapp import models
-from blogapp.models import Post, Comment, Category
+from blogapp.models import Post, Comment, Category, Vote
 from mptt.admin import MPTTModelAdmin
 
 
@@ -22,4 +22,5 @@ class AuthorAdmin(admin.ModelAdmin):
 
 # admin.site.register(Post, AuthorAdmin)
 admin.site.register(Category)
+admin.site.register(Vote)
 admin.site.register(Comment, MPTTModelAdmin)

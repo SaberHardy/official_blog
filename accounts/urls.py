@@ -30,6 +30,8 @@ urlpatterns = [
     path('profile/favorite_list/', views.favorite_list, name='favorite_list'),
     path('like/', views.like, name='like'),
 
+    path('thumbs/', views.thumbs, name='thumbs'),
+
     path('register/', views.accounts_register, name='register'),
     path('activate/<slug:uidb64>/<slug:token>/', views.activate, name='activate'),
 ]

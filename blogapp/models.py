@@ -41,6 +41,10 @@ class Post(models.Model):
     likes = models.ManyToManyField(User, related_name='like', default=None, blank=True)
     like_count = models.BigIntegerField(default='0')
 
+    thumbs = models.ManyToManyField(User, related_name='thumbs', default=None, blank=True)
+    thumbsup = models.IntegerField(default='0')
+    thumbsdown = models.IntegerField(default='0')
+
     image = models.ImageField(upload_to=user_directory_path, default='posts/trees.jpeg')
 
     # instead of using everytime the order we need to make it by default
@@ -78,3 +82,11 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return f"Comment by {self.name}"
+
+
+class Vote(models.Model):
+    post = models.ForeignKey(Post, related_name='postid',
+                             on_delete=models.CASCADE, default=None, blank=True)
+    user = models.ForeignKey(User, related_name='userid',
+                             on_delete=models.CASCADE, default=None, blank=True)
+    vote = models.BooleanField(default=True)
