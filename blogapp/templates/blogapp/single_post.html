@@ -210,21 +210,29 @@
                         {% load mptt_tags %}
                         <div>
                             {% recursetree allcomments %}
-                                <div id="{{ node.id }}" class="my-2 p-2">
+                                <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid grey">
 
                                     <div class="d-flex justify-content-between">
                                         By {{ node.name }}
                                         <div>{{ node.date_commented|date }}</div>
                                     </div>
-                                    <div>{{ node.content }}</div>
-                                    <div>{{ node.level }}</div>
+                                    <div class="node-content">{{ node.content }}</div>
 
-                                    {% if node.level < 3 %}
+                                    <div class="d-flex flex-row-reverse">
 
-                                        <button class="btn btn-info my-2" onclick="myFunction({{ node.id }})">Reply
-                                        </button>
-                                        <hr>
-                                    {% endif %}
+                                        {% if node.level < 3 %}
+                                            <button class="btn btn-info my-2 btn-sm"
+                                                    onclick="myFunction({{ node.id }})">Reply
+                                            </button>
+
+                                            {% if node.author|stringformat:"s" == user.get_username %}
+                                                <button class="btn btn-danger btn-sm my-2 mx-2"
+                                                        onclick="delete_comment({{ node.id }})">Delete
+                                                </button>
+                                            {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    <hr>
                                 </div>
                                 {% if not node.is_leaf_node %}
                                     <div class="children pl-2 pl-md-5">
@@ -448,6 +456,23 @@
                 });
             });
         });
+
+        function delete_comment(id) {
+            $.ajax({
+                type: 'POST',
+                url: "{% url "blog:addcomment" %}",
+                data: {
+                    nodeid: id,
+                    action: 'delete',
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (json) {
+                    $("#" + json['remove']).remove();
+                },
+                error: function (xhr, errmsg, err) {
+                }
+            })
+        }
 
     </script>
 {% endblock %}

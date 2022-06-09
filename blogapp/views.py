@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
 from blogapp.forms import CommentForm, SearchForm
-from blogapp.models import Post, Category
+from blogapp.models import Post, Category, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
@@ -67,17 +67,25 @@ def add_comment(request):
     create new ajax request and sent to this view and capture it using the if request.method == post
     """
     if request.method == "POST":
-        comment_form = CommentForm(request.POST)
 
-        if comment_form.is_valid():
-            user_comment = comment_form.save(commit=False)
-            user_comment.author = request.user
-            user_comment.save()
+        if request.POST.get('action') == 'delete':
+            id = request.POST.get('nodeid')
+            c = Comment.objects.get(id=id)
+            c.delete()
+            return JsonResponse({'remove': id})
 
-            result = comment_form.cleaned_data.get('content')
-            user = request.user.username
+        else:
+            comment_form = CommentForm(request.POST)
 
-            return JsonResponse({'result': result, 'user': user})
+            if comment_form.is_valid():
+                user_comment = comment_form.save(commit=False)
+                user_comment.author = request.user
+                user_comment.save()
+
+                result = comment_form.cleaned_data.get('content')
+                user = request.user.username
+
+                return JsonResponse({'result': result, 'user': user})
 
 
 class CategoryListView(ListView):
