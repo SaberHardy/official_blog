@@ -208,10 +208,9 @@
                     {% endwith %}
                     {% if user.is_authenticated %}
                         {% load mptt_tags %}
-                        <div>
+                        <div style="border: 1px solid grey">
                             {% recursetree allcomments %}
-                                <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid grey">
-
+                                <div id="{{ node.id }}" class="my-2 p-2">
                                     <div class="d-flex justify-content-between">
                                         By {{ node.name }}
                                         <div>{{ node.date_commented|date }}</div>
@@ -232,12 +231,13 @@
                                             {% endif %}
                                             </div>
                                         {% endif %}
-                                    <hr>
+
                                 </div>
                                 {% if not node.is_leaf_node %}
                                     <div class="children pl-2 pl-md-5">
                                         {{ children }}
                                     </div>
+                                    <hr>
                                 {% endif %}
                             {% endrecursetree %}
                         </div>
@@ -377,29 +377,34 @@
         }
 
         function myFunction(id) {
-            if (document.contains(document.getElementById("newForm"))) {
-                document.getElementById("newForm").remove();
+            if (document.contains(document.getElementById("newcommentform"))) {
+                document.getElementById("newcommentform").remove();
             }
 
+            var postid = document.getElementById('thumbs').getAttribute('data-value');
+            var imgFullURL = $('img.avatar_comment')[0].src;
             var d1 = document.getElementById(id);
-            d1.insertAdjacentHTML('afterend',
-                '<form id="newForm" class="form-insert py-2" method="post"> \
-                          <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" \
-                          class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
-                          <label for="id_name">Name:</label> \
-                          <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
-                          <select name="parent" class="d-none" id="id_parentt"> \
-                          <option value="' + id + '" selected="' + id + '"></option> \
-                </select> \
-                <label for="id_email">Email:</label> \
-                <input type="text" name="email" class="col-sm-12" maxlength="254" required="" id="id_email"> \
-                <label for="id_content">Content:</label> \
-                <textarea name="content" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
-                {% csrf_token %} \
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> \
-              </form>');
 
-            //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+
+            d1.insertAdjacentHTML('afterend',
+                '<form id="newcommentform" class="commentform" method="post"> \
+                {% csrf_token %} \
+                    <select name="post" class="d-none" id="id_post"> \
+                      <option value="' + postid + '" selected="' + postid + '"></option> \
+                    </select> <label class="small font-weight-bold"></label> \
+                    <select name="parent" class="d-none" id="id_parent"> \
+                      <option value="' + id + '" selected="' + id + '"></option> \
+                    </select> \
+                    <div class="d-flex"> \
+                      <img class="avatar_comment align-self-center" src="' + imgFullURL + '"> \
+                      <textarea name="content" cols="40" rows="1" class="ml-3 mb-3 form-control border-0 comment-add rounded-0" placeholder="Add a public comment" required="" id="id_content"></textarea> \
+                    </div> \
+                    <div class="d-flex flex-row-reverse"> \
+                    <button type="button" class="btn btn-outline-secondary" onclick="formExit()">Close</button> \
+                      <button value="newcommentform" id="newcommentinner" type="submit" class="mr-1 newcomment btn btn-primary ">Submit</button> \
+                    </div> \
+                  </form>'
+            );
         }
 
         $('#myForm').trigger("reset");
