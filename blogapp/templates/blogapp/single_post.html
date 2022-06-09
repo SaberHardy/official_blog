@@ -40,6 +40,7 @@
             }
         }
 
+        .avatar_comment,
         .avatar_single {
             height: 48px;
             width: 48px;
@@ -54,6 +55,19 @@
 
         .thumb-active {
             fill: blue;
+        }
+
+        .comment-add {
+            border-bottom: 1px solid #ccc !important;
+        }
+
+        .comment-add:focus {
+            border-color: #1497ff;
+            box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075), 0 0 0px rgba(255, 0, 0, 0.6);
+        }
+
+        .node-content {
+            padding-left: 64px;
         }
 
     </style>
@@ -195,7 +209,7 @@
                     {% if user.is_authenticated %}
                         {% load mptt_tags %}
                         <div>
-                            {% recursetree comments %}
+                            {% recursetree allcomments %}
                                 <div id="{{ node.id }}" class="my-2 p-2">
 
                                     <div class="d-flex justify-content-between">
@@ -267,12 +281,41 @@
                         {% endcomment %}
                         <hr>
                         <h2 class="mt-5">Create a comment</h2>
+                        {% comment %}
                         <form method="POST" id="myForm">
                             {% csrf_token %}
 
                             {{ comment_form.as_p }}
 
                             <button class="btn btn-success float-right my-3">Submit comment</button>
+                        </form>
+                        {% endcomment %}
+
+                        <form method="POST" id="commentform" class="commentform">
+                            {% csrf_token %}
+
+                            {% with allcomments.count as total_comments %}
+                                <p>{{ total_comments }} comment{{ total_comments|pluralize }}</p>
+                            {% endwith %}
+
+                            <select name="post" class="d-none" id="id_post">
+                                <option value="{{ post.id }}" selected="{{ post.id }}"></option>
+                            </select>
+
+                            <label class="small font-weight-bold">{{ comment_form.parent.label }}</label>
+                            {{ comment_form.parent }}
+
+                            <div class="d-flex">
+                                <img class="avatar_comment align-self-center"
+                                     src="{% for data in avatar %}{{ data.avatar.url }}{% endfor %}">
+                                {{ comment_form.content }}
+                            </div>
+                            <div class="d-flex flex-row-reverse">
+                                <button class="newcomment btn btn-primary" value="commentform" id="newcomment"
+                                        type="submit">
+                                    Submit
+                                </button>
+                            </div>
                         </form>
                     {% else %}
                         <a class="btn btn-info my-3" href="{% url 'accounts:login' %}">Login to write a comment</a>
@@ -282,7 +325,45 @@
             </div>
         </div>
     </div>
+
     <script>
+
+        $(document).on('click', '#newcomment, #newcommentinner', function (e) {
+            e.preventDefault();
+
+
+            // this one is for capturing the value of the button and pass it to data
+            var button = $(this).attr("value");
+            var placement = "commentform"
+            if (button == "newcommentform") {
+                var placement = "newcommentform"
+            }
+
+
+            $.ajax({
+                    type: 'POST',
+                    url: '{% url "blog:addcomment" %}',
+                    {#data: {#}
+                    data: $("#" + button).serialize(),
+                    {#postid: $('#like-button').val(),#}
+                    {#csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),#}
+                    {#action: 'post',#}
+                    cache: false,
+                    success: function (json) {
+                        {#document.getElementById("like_count").innerHTML = json['result']#}
+                        {#console.log(json)#}
+                        console.log(json)
+                        $('<div id="" class="my-2 p-2" style="border: 1px solid grey"> \ ' +
+                            '<div class="d-flex justify-content-between">By ' + json['user'] +
+                            '<div></div>Posted: Just now!</div> <div>' + json['result'] + '</div> <hr>\ ' +
+                            '</div>').insertBefore('#' + placement);
+                    },
+                    error: function (xhr, errmsg, err) {
+                    }
+                }
+            );
+        })
+
         function formExit() {
             document.getElementById("newForm").remove();
         }
@@ -335,37 +416,38 @@
             });
         })
 
-          $(document).ready(function () {
-    $('.thumbaction').click(function (e) {
-      e.preventDefault();
+        $(document).ready(function () {
+            $('.thumbaction').click(function (e) {
+                e.preventDefault();
 
-      var postid = document.getElementById('thumbs').getAttribute('data-value');
-      var button = $(this).attr("value");
+                var postid = document.getElementById('thumbs').getAttribute('data-value');
+                var button = $(this).attr("value");
 
-      $.ajax({
-        type: 'POST',
-        url: '{% url "accounts:thumbs" %}',
-        data: {
-          postid: postid,
-          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-          action: 'thumbs',
-          button: button,
-        },
-        success: function (json) {
-          if (json.length < 1 || json == undefined) {
-            //empty
-          }
-          document.getElementById("up").innerHTML = json['up']
-          document.getElementById("down").innerHTML = json['down']
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "accounts:thumbs" %}',
+                    data: {
+                        postid: postid,
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        action: 'thumbs',
+                        button: button,
+                    },
+                    success: function (json) {
+                        if (json.length < 1 || json == undefined) {
+                            //empty
+                        }
+                        document.getElementById("up").innerHTML = json['up']
+                        document.getElementById("down").innerHTML = json['down']
 
-          $("svg").removeClass("thumb-active");
-          $("#" + button).addClass("thumb-active");
+                        $("svg").removeClass("thumb-active");
+                        $("#" + button).addClass("thumb-active");
 
-        },
-        error: function (xhr, errmsg, err) {}
-      });
-    });
-  });
+                    },
+                    error: function (xhr, errmsg, err) {
+                    }
+                });
+            });
+        });
 
     </script>
 {% endblock %}

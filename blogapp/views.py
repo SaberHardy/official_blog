@@ -26,36 +26,58 @@ def single_post(request, post):
         favorite = True
 
     allcomments = post.comments.filter(status=True)
-    page = request.GET.get('page', 1)
-    paginator = Paginator(allcomments, 2)
-    try:
-        comments = paginator.page(page)
-    except PageNotAnInteger:
-        comments = paginator.page(1)
-    except EmptyPage:
-        comments = paginator.page(paginator.num_pages)
 
-    user_comment = None
+    # page = request.GET.get('page', 1)
+    # paginator = Paginator(allcomments, 2)
+    # try:
+    #     comments = paginator.page(page)
+    # except PageNotAnInteger:
+    #     comments = paginator.page(1)
+    # except EmptyPage:
+    #     comments = paginator.page(paginator.num_pages)
+    #
+    # user_comment = None
+    #
+    # if request.method == 'POST':
+    #     comment_form = CommentForm(request.POST)
+    #     if comment_form.is_valid():
+    #         user_comment = comment_form.save(commit=False)
+    #         user_comment.post = post
+    #         user_comment.save()
+    #         return HttpResponseRedirect('/' + post.slug)
+    # else:
+    #     comment_form = CommentForm()
 
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            user_comment = comment_form.save(commit=False)
-            user_comment.post = post
-            user_comment.save()
-            return HttpResponseRedirect('/' + post.slug)
-    else:
-        comment_form = CommentForm()
+    comment_form = CommentForm()
 
     context = {
         'comment_form': comment_form,
         'post': post,
-        'comments': comments,
-        'user_comment': user_comment,
+        # 'comments': comments,
+        # 'user_comment': user_comment,
         'allcomments': allcomments,
         'favorite': favorite,
     }
     return render(request, 'blogapp/single_post.html', context)
+
+
+def add_comment(request):
+    """
+    Will capture the Ajax requests, when we create new comment that will going to
+    create new ajax request and sent to this view and capture it using the if request.method == post
+    """
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+
+        if comment_form.is_valid():
+            user_comment = comment_form.save(commit=False)
+            user_comment.author = request.user
+            user_comment.save()
+
+            result = comment_form.cleaned_data.get('content')
+            user = request.user.username
+
+            return JsonResponse({'result': result, 'user': user})
 
 
 class CategoryListView(ListView):
@@ -139,7 +161,7 @@ def post_search(request):
             query = SearchQuery('q')
 
             results = Post.objects.annotate(
-                rank=SearchRank(vector, query, cover_density=True))\
+                rank=SearchRank(vector, query, cover_density=True)) \
                 .order_by('-rank')
 
     context = {'form': form, 'q': q, 'results': results}

@@ -63,11 +63,12 @@ class Post(models.Model):
 
 
 class Comment(MPTTModel):
+    author = models.ForeignKey(User, related_name='author', on_delete=models.CASCADE, default=None, blank=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     parent = TreeForeignKey('self', on_delete=models.CASCADE,
                             null=True, blank=True, related_name='children')
-    name = models.CharField(max_length=50)
-    email = models.EmailField()
+    # name = models.CharField(max_length=50)
+    # email = models.EmailField()
     content = models.TextField()
     date_commented = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
@@ -80,8 +81,8 @@ class Comment(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['date_commented']
 
-    def __str__(self):
-        return f"Comment by {self.name}"
+    # def __str__(self):
+    #     return f"Comment by {self.name}"
 
 
 class Vote(models.Model):

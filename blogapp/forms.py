@@ -17,16 +17,20 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        fields = ('name', 'parent', 'email', 'content')
+        fields = ('post', 'parent', 'content')
         widgets = {
-            'name': forms.TextInput(attrs={"class": "col-sm-12"}),
-            'email': forms.TextInput(attrs={"class": "col-sm-12"}),
-            'content': forms.Textarea(attrs={"class": "form-control"}),
-        }
+            'content': forms.Textarea(attrs={"class": "ml-3 mb-3 form-control border-0"
+                                                      "comment-add rounded-0",
+                                             'rows': 1, 'placeholder': 'Add a public comment'})}
+
+        def save(self, *args, **kwargs):
+            Comment.objects.rebuild()
+            return super(CommentForm, self).save(*args, **kwargs)
 
 
 class SearchForm(forms.Form):
     q = forms.CharField()
+
     # categories = forms.ModelChoiceField(
     #     queryset=Category.objects.all().order_by('name')
     # )
