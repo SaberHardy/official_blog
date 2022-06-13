@@ -70,6 +70,21 @@
             padding-left: 64px;
         }
 
+        #second-div {
+            float: right;
+            background: green;
+        }
+
+        #wrapper {
+            overflow: auto;
+        }
+
+        #filter-categories {
+            float: right;
+            position: absolute;
+            top: 295px;
+            right: 50px;
+        }
     </style>
 
     <div class="container">
@@ -196,11 +211,10 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-md-10 pt-5">
+            <div class="col-md-10 pt-5" id="wrapper">
                 <img class="card-img-top my-4" src="{{ post.image.url }}" alt="{{ post.title }}">
                 <div class="col-12 text-center small text-muted pt-1">{{ post.image_caption }}</div>
                 <p>{{ post.content|safe }}</p>
-
                 <br>
                 <div class="col-md-12 my-5" style="border: 0.3px solid #000000;  border-radius: 2%;">
                     {% with allcomments.count as total_comments %}
@@ -331,7 +345,18 @@
                 </div>
 
             </div>
+            <div id="filter-categories">
+                <h3 class="font-weight-bold">Filter Categories</h3>
+                {% for category in categories %}
+                    <h4 class="font-weight-bold">
+                        <a class="dropdown-item" type="button" href="/category/{{ category.name }}">
+                            {{ category|capfirst }}
+                        </a>
+                    </h4>
+                {% endfor %}
+            </div>
         </div>
+
     </div>
 
     <script>
