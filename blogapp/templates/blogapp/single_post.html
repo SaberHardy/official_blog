@@ -9,7 +9,7 @@
             <div class="col-md-8 d-flex justify-content-between">
                 <h1 class="h1">{{ post.title|capfirst }}</h1>
             </div>
-            <div class="col-md-8 d-flex justify-content-between pt-3">
+            <div class="col-md-12 d-flex justify-content-between pt-3">
                 <div class="d-flex">
                     <div><img class="avatar_single" src="{{ post.author.profile.avatar.url }}"></div>
                     <div class="pl-3 no-gutters">
@@ -128,7 +128,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-md-10 pt-5" id="wrapper">
+            <div class="col-md-12 pt-5" id="wrapper">
                 <img class="card-img-top my-4" src="{{ post.image.url }}" alt="{{ post.title }}">
                 <div class="col-12 text-center small text-muted pt-1">{{ post.image_caption }}</div>
                 <p>{{ post.content|safe }}</p>
@@ -262,17 +262,17 @@
                 </div>
 
             </div>
-        <div id="filter-categories">
-                <h3 class="font-weight-bold">Filter Categories</h3>
-                {% for category in categories %}
-                    <h4 class="font-weight-bold">
-                        <a class="dropdown-item" type="button" href="/category/{{ category.name }}">
-                            {{ category|capfirst }}
-                        </a>
-                    </h4>
-                {% endfor %}
-            </div>
-        </div>
+{#        <div id="filter-categories">#}
+{#                <h3 class="font-weight-bold">Filter Categories</h3>#}
+{#                {% for category in categories %}#}
+{#                    <h4 class="font-weight-bold">#}
+{#                        <a class="dropdown-item" type="button" href="/category/{{ category.name }}">#}
+{#                            {{ category|capfirst }}#}
+{#                        </a>#}
+{#                    </h4>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
 
     </div>
 
