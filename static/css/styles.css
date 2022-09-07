@@ -39,7 +39,7 @@ p {
     font-family: 'PT Serif', serif;
     line-height: 2rem;
     font-size: 1.3rem;
-    color: white;
+    color: #050505;
 }
 
 @media screen and (min-width: 600px) {

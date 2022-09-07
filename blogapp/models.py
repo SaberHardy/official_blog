@@ -33,7 +33,7 @@ class Post(models.Model):
     excerpt = models.TextField()
     slug = models.SlugField(max_length=250, unique_for_date='publish')
     publish = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', null=True, blank=True)
     content = models.TextField()
     status = models.CharField(max_length=10, choices=options, default='draft')
     favorites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
@@ -59,7 +59,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('blog:single_post', args=[self.slug])
+        return reverse('blog:home')
 
 
 class Comment(MPTTModel):

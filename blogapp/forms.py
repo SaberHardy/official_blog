@@ -1,7 +1,7 @@
 from django import forms
 from mptt.forms import TreeNodeChoiceField
 
-from blogapp.models import Comment, Category
+from blogapp.models import Comment, Category, Post
 
 
 class CommentForm(forms.ModelForm):
@@ -48,3 +48,26 @@ class SearchForm(forms.Form):
             'class': 'form-control menudd'})
         self.fields['q'].widget.attrs.update({
             'data-toggle': 'dropdown'})
+
+
+choices = Category.objects.all().values_list('name', 'name')
+
+choice_list = []
+for item in choices:
+    choice_list.append(item)
+
+
+class PostForm(forms.ModelForm):
+
+    class Meta:
+        model = Post
+        fields = ('title', 'category', 'excerpt', 'content', 'status', 'image')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control',
+                                            'placeholder': 'Type your title here'}),
+            'excerpt': forms.TextInput(attrs={'class': 'form-control',
+                                              'placeholder': 'Type your tag here'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'value': '', 'type': 'hidden',
+                                             'id': 'usernameId'}),
+            'category': forms.Select(choices=choice_list, attrs={'class': 'form-control'}),
+        }

@@ -2,9 +2,9 @@ from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 
-from blogapp.forms import CommentForm, SearchForm
+from blogapp.forms import CommentForm, SearchForm, PostForm
 from blogapp.models import Post, Category, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -18,8 +18,8 @@ def home(request):
     return render(request, 'blogapp/home.html', context)
 
 
-def single_post(request, post):
-    post = get_object_or_404(Post, slug=post, status='published')
+def single_post(request, pk):
+    post = get_object_or_404(Post, pk=pk, status='published')
 
     favorite = bool
     if post.favorites.filter(id=request.user.id).exists():
@@ -174,3 +174,9 @@ def post_search(request):
 
     context = {'form': form, 'q': q, 'results': results}
     return render(request, 'blogapp/search.html', context)
+
+
+class CreatePostView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blogapp/add_post.html'
