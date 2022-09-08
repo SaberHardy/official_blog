@@ -13,7 +13,7 @@
 
                 {% for post in new %}
                     <div class="col-md-4">
-                        <a href="{{ post.get_absolute_url }}" class="text-dark">
+                        <a href="{% url 'blog:single_post' post.pk %}" class="text-dark">
                             <div class="card mb-4 box-shadow">
                                 <img class="card-img-top" style="width: 350px; height: 250px" src="{{ post.image.url }}"
                                      alt="{{ post.title }}">

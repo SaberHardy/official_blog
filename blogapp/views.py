@@ -151,6 +151,7 @@ def post_search(request):
     form = SearchForm()
     q = ''
     results = []
+    context = {}
 
     if 'q' in request.GET:
         form = SearchForm(request.GET)
@@ -168,11 +169,13 @@ def post_search(request):
             vector = SearchVector('title', weight='A') + SearchVector('content', weight='B')
             query = SearchQuery('q')
 
-            results = Post.objects.annotate(
-                rank=SearchRank(vector, query, cover_density=True)) \
-                .order_by('-rank')
+            # results = Post.objects.annotate(
+            #     rank=SearchRank(vector, query, cover_density=True)) \
+            #     .order_by('-publish')
+            results = Post.objects.filter(Q(title__icontains=q) |
+                                        Q(content__icontains=q))
 
-    context = {'form': form, 'q': q, 'results': results}
+        context = {'form': form, 'q': q, 'results': results}
     return render(request, 'blogapp/search.html', context)
 
 

@@ -12,7 +12,7 @@
                 {% if categorylist.posts %}
                     {% for post in categorylist.posts %}
                         <div class="col-md-4">
-                            <a href="{{ post.get_absolute_url }}" class="text-dark">
+                            <a href="{% url 'blog:single_post' post.pk %}" class="text-dark">
                                 <div class="card mb-4 box-shadow card-info">
                                     <img class="card-img-top" src="{{ post.image.url }}"
                                          style="width: 348px; height: 250px"
