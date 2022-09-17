@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse

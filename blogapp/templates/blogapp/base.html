@@ -50,10 +50,12 @@
                     Favorites posts</a>
             </li>
 
+        {% if user.is_authenticated and user.is_superuser %}
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'blog:createpost' %}">
                     Create Post</a>
             </li>
+        {% endif %}
         </ul>
 
         <ul class="navbar-nav" style="margin-right: 150px;">
