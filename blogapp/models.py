@@ -1,8 +1,14 @@
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 from django.db import models
+
+
+# User = settings.AUTH_USER_MODEL
 
 
 def user_directory_path(instance, filename):
@@ -58,8 +64,31 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    # def save(self, *args, **kwargs):
+    #     if self.slug is None:
+    #         self.slug = slugify(self.title)
+    #     else:
+    #         self.slug = slugify(self.slug)
+    #
+    #     super().save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse('blog:home')
+
+
+# @receiver(post_save, sender=Post)
+# def post_pre_save(sender, instance, *args, **kwargs):
+#     if not instance.slug:
+#         instance.slug = slugify(instance.title)  # => this is ==> this-is
+#
+#
+# pre_save.connect(post_pre_save, sender=User)
+
+# @receiver(post_save, sender=User)
+# def user_pre_save_receiver(sender, instance, create, *args, **kwargs):
+#
+#     print(f"Send email to {instance.username} - {instance.id}")
+# post_save.connect(user_pre_save_receiver, sender=User)
 
 
 class Comment(MPTTModel):

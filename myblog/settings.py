@@ -22,12 +22,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # This is done automatically!!
     'blogapp.apps.BlogappConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.postgres',
     'mptt',
 
     # 'admin_honeypot',
+
+    # This one also should be mentioned after signals is done
+    # 'blogapp.apps.BlogappConfig',
+
 ]
 
 MIDDLEWARE = [
