@@ -1,16 +1,25 @@
 {% extends "partials/base.html" %}
+{% load static %}
+
 {% block title %}Profile{% endblock %}
 {% block content %}
     {% include "partials/navbar.html" %}
     <div class="container">
+        <div class="col-sm">
+            <div class="row ">
+                <img src="{{ user.profile.avatar }}">
+                <h3 class="mx-5">{{ user.username }}</h3>
+            </div>
+        </div>
         <section class="jumbotron text-center bg-white">
             <div class="container">
                 <h1>User Dashboard</h1>
                 <p class="lead text-muted">{{ user.profile.bio }}<p>
-                    <a href="{% url 'logout' %}" class="btn btn-primary my-2">Logout</a>
-                </p>
+                <a href="{% url 'logout' %}" class="btn btn-primary my-2">Logout</a>
+            </p>
             </div>
         </section>
+
     </div>
     {% include "partials/footer.html" %}
 {% endblock %}

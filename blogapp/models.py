@@ -75,20 +75,11 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('blog:home')
 
+    # we can use this instead of signals in this case
 
-# @receiver(post_save, sender=Post)
-# def post_pre_save(sender, instance, *args, **kwargs):
-#     if not instance.slug:
-#         instance.slug = slugify(instance.title)  # => this is ==> this-is
-#
-#
-# pre_save.connect(post_pre_save, sender=User)
-
-# @receiver(post_save, sender=User)
-# def user_pre_save_receiver(sender, instance, create, *args, **kwargs):
-#
-#     print(f"Send email to {instance.username} - {instance.id}")
-# post_save.connect(user_pre_save_receiver, sender=User)
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(self.title)
+    #     super(Post, self).save(*args, **kwargs)
 
 
 class Comment(MPTTModel):
